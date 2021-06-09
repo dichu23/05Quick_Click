@@ -6,6 +6,18 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    public enum Gamestate
+    {
+        loading,
+        inGame,
+        gameOver,
+
+    }
+
+    public Gamestate gameState;
+    
+
+
     public List<GameObject> targetprefabs;
     private float spawnRate = 1f;
 
@@ -37,6 +49,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameState = Gamestate.inGame;
+
         StartCoroutine(SpawnTarget());
 
         Score = 0;
@@ -45,7 +59,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnTarget()
     {
-        while (true)
+        while (gameState == Gamestate.inGame)
         {
             yield return new WaitForSeconds(spawnRate);
             int index = Random.Range(0, targetprefabs.Count);
@@ -65,7 +79,11 @@ public class GameManager : MonoBehaviour
 
     public void Gameover()
     {
+
+        gameState = Gamestate.gameOver;
+
         gameOverText.gameObject.SetActive(true);
+
     }
 
 }
