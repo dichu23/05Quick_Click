@@ -51,7 +51,7 @@ public class Target : MonoBehaviour
     }
 
    
-    private void OnMouseDown()
+   private void OnMouseOver()
     {
         if (gameManager.gameState == GameManager.Gamestate.inGame)
         { Destroy(gameObject);

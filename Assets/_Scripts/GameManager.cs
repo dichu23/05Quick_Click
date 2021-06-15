@@ -50,12 +50,27 @@ public class GameManager : MonoBehaviour
     }
 
     public TextMeshProUGUI gameOverText;
-    
 
-    // Start is called before the first frame update
-    void Start()
+    public GameObject tittleScreen;
+
+
+    private void Start()
+    {
+        ShowMaxScore();
+    }
+
+
+
+    /// <summary>
+    /// metodo que inicia la partida cambiando el estado del valor del juego.
+    /// </summary>
+    /// <param name="difficulty"> numero entero que indica la dificultal del juego</param>
+    public void StarGame(int difficulty)
     {
         gameState = Gamestate.inGame;
+        tittleScreen.gameObject.SetActive(false);
+
+        spawnRate /= difficulty;
 
         StartCoroutine(SpawnTarget());
 
@@ -83,11 +98,33 @@ public class GameManager : MonoBehaviour
         scoreText.text = ("Puntuacion:\n" + Score); //los parentesis no son necesarios // \n = intro (escaping symbol)
     }
 
+    public void ShowMaxScore()
+    {
+        int maxScore = PlayerPrefs.GetInt("Max Score",0);
+
+        scoreText.text = "Max Score:" + maxScore;
+
+    }
+
+    private void SetMaxScore()
+    {
+        int maxScore = PlayerPrefs.GetInt("Max Score", 0);
+        if(Score >maxScore)
+        {
+            PlayerPrefs.SetInt("Max Score", Score);
+
+        }
+       
+
+    }
+
     public void Gameover()
     {
 
-        gameState = Gamestate.gameOver;
+        SetMaxScore();
 
+
+        gameState = Gamestate.gameOver;
         gameOverText.gameObject.SetActive(true);
         restartButton.gameObject.SetActive(true);
 
