@@ -53,6 +53,10 @@ public class GameManager : MonoBehaviour
 
     public GameObject tittleScreen;
 
+    private int numberOfLifes = 4;
+    public List<GameObject> lives;
+
+
 
     private void Start()
     {
@@ -71,6 +75,15 @@ public class GameManager : MonoBehaviour
         tittleScreen.gameObject.SetActive(false);
 
         spawnRate /= difficulty;
+
+        numberOfLifes -= difficulty;
+
+        for (int i = 0; i < numberOfLifes; i++)
+        {
+            lives[i].SetActive(true);
+        }
+
+
 
         StartCoroutine(SpawnTarget());
 
@@ -121,12 +134,20 @@ public class GameManager : MonoBehaviour
     public void Gameover()
     {
 
-        SetMaxScore();
+        numberOfLifes--;
 
+        Image heartImage = lives[numberOfLifes].GetComponent<Image>();
+        var tempColor = heartImage.color;
+        tempColor.a = 0.3f;
+        heartImage.color = tempColor;
 
-        gameState = Gamestate.gameOver;
-        gameOverText.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(true);
+        if (numberOfLifes <= 0)
+        {
+            SetMaxScore();
+            gameState = Gamestate.gameOver;
+            gameOverText.gameObject.SetActive(true);
+            restartButton.gameObject.SetActive(true);
+        }
 
 
     }
